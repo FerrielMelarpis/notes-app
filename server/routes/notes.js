@@ -1,24 +1,18 @@
-var express = require('express');
-var router = express.Router();
-
-const notes = [
-  {
-    id: 1,
-    html: `
-      <h1>My todo list</h1>
-      <ul>
-        <li>Create server</li>
-        <li>Create react app</li>
-      </ul>
-    `,
-  },
-];
+const express = require('express');
+const debug = require('debug');
+const router = express.Router();
+const db = require('../services/db');
 
 /* GET notes listing. */
-router.get('/', function(req, res, next) {
-  res.json({
-    notes: notes,
+router.get('/', async function(req, res, next) {
+  const rows = await db.select().from('notes');
+  return res.json({
+    notes: rows,
   });
+});
+
+router.post('/', async function(req, res, next) {
+  return res.json({ message: 'note successfully created' });
 });
 
 module.exports = router;
